@@ -1,0 +1,14 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+        maven {
+            allowInsecureProtocol = true
+            url 'http://172.16.8.77:8081/repository/maven-public'
+        }
+    }
+}
+rootProject.name = "TitleLayoutDemo"
+include ':app'
