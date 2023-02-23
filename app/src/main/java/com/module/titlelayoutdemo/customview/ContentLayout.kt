@@ -38,6 +38,7 @@ class ContentLayout @JvmOverloads constructor(
             }
 
             override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+                Log.e("ContentLayout","onScroll----->p0:"+p0?.action+",p1:"+p1?.action)
                 return false
             }
 
@@ -47,9 +48,9 @@ class ContentLayout @JvmOverloads constructor(
             override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
                 val slideX = p0?.x?.minus(p1!!.x)?.minus(SLIDE_ACTION_LEN)
                 val slideY = p0?.y?.minus(p1!!.y)?.minus(SLIDE_ACTION_LEN)
-                val slideAbsX = p0?.x?.minus(p1!!.x)!!.absoluteValue?.minus(SLIDE_ACTION_LEN)
-                val slideAbsY = p0?.y?.minus(p1!!.y)!!.absoluteValue?.minus(SLIDE_ACTION_LEN)
-                Log.e("onFling","onFling----->")
+                val slideAbsX = p0!!.x!!.minus(p1!!.x)!!.absoluteValue!!.minus(SLIDE_ACTION_LEN)
+                val slideAbsY = p0!!.y!!.minus(p1!!.y)!!.absoluteValue!!.minus(SLIDE_ACTION_LEN)
+                Log.e("ContentLayout","onFling----->")
 
                 if (slideX!! > 0 && slideAbsX > slideAbsY){
                     switchView(true)
@@ -108,8 +109,15 @@ class ContentLayout @JvmOverloads constructor(
         onInterceptTouch = (ev?.x!!-oldX).absoluteValue > (ev?.y!!-oldY).absoluteValue
         oldX = ev?.x!!
         oldY = ev?.y!!
+        Log.e("onInterceptTouchEvent","onInterceptTouchEvent----->"+onInterceptTouch)
+        when (ev.action){
+            MotionEvent.ACTION_MOVE->{
+                return onInterceptTouch
+            }
+        }
 
-        return onInterceptTouch
+
+        return false
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
