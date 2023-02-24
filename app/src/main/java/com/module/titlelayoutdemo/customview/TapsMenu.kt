@@ -16,7 +16,6 @@ import androidx.core.view.children
  */
 class TapsMenu(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
 
-    var isSwitchView = false
     /**
      * 切换不同的布局视图
      */
@@ -31,24 +30,29 @@ class TapsMenu(context: Context, attrs: AttributeSet?) : LinearLayout(context, a
                     childView.childView?.visibility =  View.GONE
                 }
             }
-        isSwitchView = true
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val childView = getChildAt(0) as FlagTextView
-        if (!isSwitchView){
-            childView.isSelected = true
-        }
         setMeasuredDimension(widthMeasureSpec,childView.textSize.toInt()*2)
+    }
+
+    override fun addView(child: View?) {
+        val childView = child as FlagTextView
+        if (childCount == 0){
+            childView.isSelected = true
+            childView.childView!!.visibility = VISIBLE
+        } else {
+            childView.isSelected = false
+            childView.childView!!.visibility = GONE
+        }
+        super.addView(child)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         for (pos in 0 until childCount){
             val childView = getChildAt(pos) as FlagTextView
-            if (pos != 0 && !isSwitchView){
-                childView.childView!!.visibility = GONE
-            }
 
             val offsetX = childView.text.length * childView.textSize/3
             childView.measure(measuredWidth/childCount,

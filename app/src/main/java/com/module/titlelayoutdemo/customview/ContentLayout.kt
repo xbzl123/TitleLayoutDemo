@@ -115,8 +115,6 @@ class ContentLayout @JvmOverloads constructor(
                 return onInterceptTouch
             }
         }
-
-
         return false
     }
 

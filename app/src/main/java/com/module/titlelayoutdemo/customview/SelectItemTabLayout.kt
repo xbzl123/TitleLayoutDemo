@@ -44,8 +44,8 @@ class SelectItemTabLayout(context: Context?, attrs: AttributeSet?) : LinearLayou
     private fun addViewToContainer(flagTextView:FlagTextView, view: View){
         flagTextView.apply {
             binding.container.addView(view)
-            binding.taps.addView(this)
             childView = view
+            binding.taps.addView(this)
             setOnClickListener {
                 binding.taps.showSelectView(this)
             }
