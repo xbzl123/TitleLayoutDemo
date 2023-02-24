@@ -8,13 +8,13 @@
 
 
 
-<img src="E:\TitleLayoutDemo\8.jpg" style="zoom:50%;" />
+<img src="8.jpg" style="zoom:50%;" />
 
 结构分析：主要分上下2层：标题区和内容区。
 
 
 
-![](E:\TitleLayoutDemo\9.png)
+![结构图](9.png)
 
 标题区：字符串命名，带下划线，被选中的项会染上蓝色，点击标题区可以切换内容区。包含以下：
 
