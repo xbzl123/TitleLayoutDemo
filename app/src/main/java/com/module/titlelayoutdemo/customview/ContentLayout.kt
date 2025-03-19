@@ -46,24 +46,26 @@ class ContentLayout @JvmOverloads constructor(
             }
 
             override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
-                val slideX = p0?.x?.minus(p1!!.x)?.minus(SLIDE_ACTION_LEN)
-                val slideY = p0?.y?.minus(p1!!.y)?.minus(SLIDE_ACTION_LEN)
-                val slideAbsX = p0!!.x!!.minus(p1!!.x)!!.absoluteValue!!.minus(SLIDE_ACTION_LEN)
-                val slideAbsY = p0!!.y!!.minus(p1!!.y)!!.absoluteValue!!.minus(SLIDE_ACTION_LEN)
-                Log.e("ContentLayout","onFling----->")
+                p0?.let {
+                    val slideX = p0?.x?.minus(p1!!.x)?.minus(SLIDE_ACTION_LEN)
+                    val slideY = p0?.y?.minus(p1!!.y)?.minus(SLIDE_ACTION_LEN)
+                    val slideAbsX = p0!!.x!!.minus(p1!!.x)!!.absoluteValue!!.minus(SLIDE_ACTION_LEN)
+                    val slideAbsY = p0!!.y!!.minus(p1!!.y)!!.absoluteValue!!.minus(SLIDE_ACTION_LEN)
+                    Log.e("ContentLayout","onFling----->")
 
-                if (slideX!! > 0 && slideAbsX > slideAbsY){
-                    switchView(true)
-                    return true
-                }else if (slideX!! < 0 && slideAbsX > slideAbsY){
-                    switchView(false)
-                    return true
-                }
-                if (slideY!! > 0 && slideAbsX < 0){
-                    return true
-                }
-                if (slideY!! < 0 && slideAbsX < 0){
-                    return true
+                    if (slideX!! > 0 && slideAbsX > slideAbsY){
+                        switchView(true)
+                        return true
+                    }else if (slideX!! < 0 && slideAbsX > slideAbsY){
+                        switchView(false)
+                        return true
+                    }
+                    if (slideY!! > 0 && slideAbsX < 0){
+                        return true
+                    }
+                    if (slideY!! < 0 && slideAbsX < 0){
+                        return true
+                    }
                 }
                 return false
             }

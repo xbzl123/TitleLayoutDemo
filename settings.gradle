@@ -5,8 +5,12 @@ dependencyResolutionManagement {
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
         maven {
+            url 'https://jitpack.io'
+        }
+        maven {
             allowInsecureProtocol = true
-            url 'http://172.16.8.77:8081/repository/maven-public'
+            url 'https://maven.aliyun.com/repository/public/'
+
         }
     }
 }

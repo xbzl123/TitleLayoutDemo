@@ -4,9 +4,12 @@ buildscript {
         google()
         mavenCentral()
         maven {
-            allowInsecureProtocol = true
-            url 'http://172.16.8.77:8081/repository/maven-public'
+            url 'https://jitpack.io'
         }
+        maven {
+            allowInsecureProtocol = true
+            url 'https://maven.aliyun.com/repository/public/'}
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.2'
