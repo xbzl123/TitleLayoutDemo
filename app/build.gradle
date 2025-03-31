@@ -1,19 +1,27 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'org.jetbrains.dokka'
 }
 
 android {
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.module.titlelayoutdemo"
         minSdk 23
-        targetSdk 32
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                // 指定 Schema 导出到项目根目录的 "schemas" 文件夹
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -47,6 +55,45 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.10'
     implementation "com.blankj:utilcodex:1.31.0"
+1
+        def room_version = "2.6.1"
 
+        implementation "androidx.room:room-runtime:$room_version"
+
+        // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+        // See KSP Quickstart to add KSP to your build
+        kapt  "androidx.room:room-compiler:$room_version"
+
+        // If this project only uses Java source, use the Java annotationProcessor
+        // No additional plugins are necessary
+        annotationProcessor "androidx.room:room-compiler:$room_version"
+
+        // optional - RxJava2 support for Room
+        implementation "androidx.room:room-rxjava2:$room_version"
+
+        // optional - RxJava3 support for Room
+        implementation "androidx.room:room-rxjava3:$room_version"
+
+        // optional - Guava support for Room, including Optional and ListenableFuture
+        implementation "androidx.room:room-guava:$room_version"
+
+        // optional - Test helpers
+        testImplementation "androidx.room:room-testing:$room_version"
+
+        // optional - Paging 3 Integration
+        implementation "androidx.room:room-paging:$room_version"
+    }
+
+tasks.named("dokkaHtml") {
+    outputDirectory.set(file("$buildDir/dokka"))
+    moduleName.set("app")
+    dokkaSourceSets {
+        named("main") {
+            sourceRoots.from(
+                    file("src/main/java"),
+                    file("build/generated/source/kapt/main")
+            )
+            noAndroidSdkLink.set(false)
+        }
+    }
 }
-

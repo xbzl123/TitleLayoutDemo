@@ -43,7 +43,7 @@ class FlagTextView @JvmOverloads constructor(
         setMeasuredDimension(textWidth, (textHeight*1.5f).toInt())
     }
     @SuppressLint("ResourceType")
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val paint = Paint()
         paint.color = selectedColor

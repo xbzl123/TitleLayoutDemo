@@ -26,26 +26,31 @@ class ContentLayout @JvmOverloads constructor(
     init {
 
         gestureDetector = GestureDetector(context,object : GestureDetector.OnGestureListener{
-            override fun onDown(p0: MotionEvent?): Boolean {
+            override fun onDown(p0: MotionEvent): Boolean {
                 return true
             }
 
-            override fun onShowPress(p0: MotionEvent?) {
+            override fun onShowPress(p0: MotionEvent) {
             }
 
-            override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+            override fun onSingleTapUp(p0: MotionEvent): Boolean {
                 return false
             }
 
-            override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+            override fun onScroll(
+                p0: MotionEvent?,
+                p1: MotionEvent,
+                p2: Float,
+                p3: Float
+            ): Boolean {
                 Log.e("ContentLayout","onScroll----->p0:"+p0?.action+",p1:"+p1?.action)
                 return false
             }
 
-            override fun onLongPress(p0: MotionEvent?) {
+            override fun onLongPress(p0: MotionEvent) {
             }
 
-            override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+            override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {
                 p0?.let {
                     val slideX = p0?.x?.minus(p1!!.x)?.minus(SLIDE_ACTION_LEN)
                     val slideY = p0?.y?.minus(p1!!.y)?.minus(SLIDE_ACTION_LEN)
@@ -121,6 +126,6 @@ class ContentLayout @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return gestureDetector.onTouchEvent(event)
+        return gestureDetector.onTouchEvent(event!!)
     }
 }
