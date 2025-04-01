@@ -7,12 +7,15 @@ import com.module.titlelayoutdemo.room.AppDBHandler
 import com.module.titlelayoutdemo.room.User
 import com.module.titlelayoutdemo.room.UserDao
 import com.module.titlelayoutdemo.ui.main.MainFragment
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
+    var size = 0
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -22,23 +25,25 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
 
-        var userDao = AppDBHandler.getRoomDBObject()?.userDao()
+        val userDao = AppDBHandler.getRoomDBObject()?.userDao()
         GlobalScope.launch {
+            withContext(Dispatchers.IO) {
+                size = userDao?.getAll()?.size!!
+                val new_id = size.plus(1)
+                userDao.insertAll(User(new_id,"long","yanghe","742781499@qq.com", "123456:$new_id"))
+            }
             if (userDao != null) {
                 showData(userDao)
             }
         }
     }
 
-    suspend fun showData(userDao: UserDao) {
+    private suspend fun showData(userDao: UserDao) {
         var showContent =""
         withContext(Dispatchers.IO){
-            userDao?.insertAll(User(1,"long","yanghe","742781499@qq.com","123456"))
-            showContent = userDao!!.getAll().get(0).email
+            showContent = userDao.getAll()[size].password
         }
-        val s = withContext(Dispatchers.Main){
-            ToastUtils.showLong(showContent)
-        }
+        ToastUtils.showLong(showContent)
     }
     override fun onResume() {
         super.onResume()
