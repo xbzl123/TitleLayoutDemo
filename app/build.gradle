@@ -55,8 +55,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.10'
     implementation "com.blankj:utilcodex:1.31.0"
-1
-        def room_version = "2.6.1"
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+
+    def room_version = "2.6.1"
 
         implementation "androidx.room:room-runtime:$room_version"
 

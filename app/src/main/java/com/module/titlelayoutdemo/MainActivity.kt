@@ -28,9 +28,11 @@ class MainActivity : AppCompatActivity() {
         val userDao = AppDBHandler.getRoomDBObject()?.userDao()
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
-                size = userDao?.getAll()?.size!!
+                size = userDao?.getAll()?.size?:0
                 val new_id = size.plus(1)
-                userDao.insertAll(User(new_id,"long","yanghe","742781499@qq.com", "123456:$new_id"))
+                if (userDao != null) {
+                    userDao.insertAll(User(new_id,"long","yanghe","742781499@qq.com", "123456:$new_id"))
+                }
             }
             if (userDao != null) {
                 showData(userDao)
