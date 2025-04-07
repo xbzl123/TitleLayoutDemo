@@ -17,10 +17,10 @@ import com.module.titlelayoutdemo.deepseek.DeepSeekResult
 import com.module.titlelayoutdemo.room.AppDBHandler
 import com.module.titlelayoutdemo.room.SearchInfo
 import com.module.titlelayoutdemo.room.SearchInfoDao
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -85,13 +85,17 @@ class HomeLayout(context: Context, attrs: AttributeSet? = null) : ContentView(co
     private fun initDeepSeekSearch() {
         val result = object : DeepSeekResult{
             override fun onResult(result: String) {
-                if (searchInfo != null) {
-                    searchInfo!!.search_result = result
-                    searchDao.insertAll(searchInfo!!)
-                }
-                handler.post {
-                    binding.searchResult.text = result
-                    waitingDialog.hide()
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO){
+                        if (searchInfo != null) {
+                            searchInfo!!.search_result = result
+                            searchDao.insertAll(searchInfo!!)
+                        }
+                    }
+                    withContext(Dispatchers.Main){
+                        binding.searchResult.text = result
+                        waitingDialog.hide()
+                    }
                 }
             }
         }
@@ -113,12 +117,10 @@ class HomeLayout(context: Context, attrs: AttributeSet? = null) : ContentView(co
                 if (query != null) {
                     GlobalScope.launch {
                         withContext(Dispatchers.IO){
-                            val size = searchDao.getAll().asLiveData().value?.size ?:0
-                            val id = size.plus(1)
                             val calendar = Calendar.getInstance()
                             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                             val formatted = dateFormat.format(calendar.time)
-                            searchInfo = SearchInfo(id,formatted,query,"",0)
+                            searchInfo = SearchInfo(0,formatted,query,"",0)
                             client.sendRequest(query)
                         }
                         withContext(Dispatchers.Main){
