@@ -3,6 +3,8 @@ package com.module.titlelayoutdemo.room
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 object AppDBHandler {
     private var db: AppDatabase? = null
@@ -10,6 +12,19 @@ object AppDBHandler {
     fun getRoomDBObject(): AppDatabase? {
         return db
     }
+    private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL(
+                "CREATE TABLE searchinfos (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        "date TEXT, " +
+                        "search_question TEXT, " +
+                        "search_result TEXT NOT NULL, " +
+                        "is_favourite INTEGER NOT NULL)"
+            )
+        }
+    }
+
 
     fun buildDBFile(context: Context){
         val dbPath = context.getDatabasePath("my_database.db").path
@@ -19,7 +34,7 @@ object AppDBHandler {
                 context,
                 AppDatabase::class.java,
                 "my_database.db"
-            )
+            ).addMigrations(MIGRATION_2_3)
                 .build()
         } catch (e: Exception) {
             Log.e("Database", "初始化失败: ${e.message}")

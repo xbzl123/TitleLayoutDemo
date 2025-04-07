@@ -12,6 +12,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </SearchView>
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/history_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </ScrollView>
         <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
