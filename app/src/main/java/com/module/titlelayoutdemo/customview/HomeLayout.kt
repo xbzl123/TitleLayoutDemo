@@ -20,6 +20,7 @@ import com.module.titlelayoutdemo.room.SearchInfoDao
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,6 +68,9 @@ class HomeLayout(context: Context, attrs: AttributeSet? = null) : ContentView(co
                     GlobalScope.launch {
                         searchDao.getAll().collect{
                             withContext(Dispatchers.Main) {
+                                it[position].is_selected = 1
+                                recycler.adapter = SearchHistoryAdapter(R.layout.flow_list,
+                                    it as ArrayList<SearchInfo>)
                                 binding.searchResult.text = it[position].search_result
                             }
                         }
@@ -120,7 +124,7 @@ class HomeLayout(context: Context, attrs: AttributeSet? = null) : ContentView(co
                             val calendar = Calendar.getInstance()
                             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                             val formatted = dateFormat.format(calendar.time)
-                            searchInfo = SearchInfo(0,formatted,query,"",0)
+                            searchInfo = SearchInfo(0,formatted,query,"",0,0)
                             client.sendRequest(query)
                         }
                         withContext(Dispatchers.Main){

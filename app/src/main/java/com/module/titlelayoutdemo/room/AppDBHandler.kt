@@ -12,6 +12,7 @@ object AppDBHandler {
     fun getRoomDBObject(): AppDatabase? {
         return db
     }
+
     private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.execSQL(
@@ -24,6 +25,12 @@ object AppDBHandler {
             )
         }
     }
+    private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE searchinfos "
+                    + " ADD COLUMN is_selected INTEGER NOT NULL DEFAULT 0");
+        }
+    }
 
 
     fun buildDBFile(context: Context){
@@ -34,7 +41,7 @@ object AppDBHandler {
                 context,
                 AppDatabase::class.java,
                 "my_database.db"
-            ).addMigrations(MIGRATION_2_3)
+            ).addMigrations(MIGRATION_3_4)
                 .build()
         } catch (e: Exception) {
             Log.e("Database", "初始化失败: ${e.message}")

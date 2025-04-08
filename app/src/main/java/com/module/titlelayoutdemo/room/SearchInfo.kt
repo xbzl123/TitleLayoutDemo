@@ -10,5 +10,6 @@ data class SearchInfo(
     val date: String?,
     val search_question: String?,
     @NonNull var search_result: String, // 确保非空
-    @NonNull val is_favourite: Int // 确保非空
+    @NonNull var is_favourite: Int, // 确保非空
+    @NonNull var is_selected:Int = 0
 )
