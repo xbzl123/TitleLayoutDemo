@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
+import com.blankj.utilcode.util.ToastUtils
 import com.module.titlelayoutdemo.R
 import com.module.titlelayoutdemo.adapter.SearchHistoryAdapter
 import com.module.titlelayoutdemo.adapter.SuggestionsAdapter
@@ -56,8 +57,10 @@ class HomeLayout(context: Context, attrs: AttributeSet? = null) : ContentView(co
         GlobalScope.launch {
             searchDao.getAll().collect{
                 recycler.adapter = SearchHistoryAdapter(R.layout.flow_list,
-                    it as ArrayList<SearchInfo>
-                )
+                    it as ArrayList<SearchInfo>)
+                withContext(Dispatchers.Main) {
+                    recycler.run { adapter?.notifyDataSetChanged() }
+                }
             }
         }
         recycler.addOnItemTouchListener(object :OnItemTouchListener{
@@ -89,17 +92,22 @@ class HomeLayout(context: Context, attrs: AttributeSet? = null) : ContentView(co
     private fun initDeepSeekSearch() {
         val result = object : DeepSeekResult{
             override fun onResult(result: String) {
-                GlobalScope.launch {
-                    withContext(Dispatchers.IO){
-                        if (searchInfo != null) {
-                            searchInfo!!.search_result = result
-                            searchDao.insertAll(searchInfo!!)
+                if (result.contains("Error")) {
+                    GlobalScope.launch {
+                        withContext(Dispatchers.IO){
+                            if (searchInfo != null) {
+                                searchInfo!!.search_result = result
+                                searchDao.insertAll(searchInfo!!)
+                            }
+                        }
+                        withContext(Dispatchers.Main){
+                            binding.searchResult.text = result
+                            waitingDialog.hide()
                         }
                     }
-                    withContext(Dispatchers.Main){
-                        binding.searchResult.text = result
-                        waitingDialog.hide()
-                    }
+                } else {
+                    waitingDialog.hide()
+                    ToastUtils.showLong(result)
                 }
             }
         }

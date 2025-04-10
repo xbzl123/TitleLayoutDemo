@@ -41,7 +41,8 @@ object AppDBHandler {
                 context,
                 AppDatabase::class.java,
                 "my_database.db"
-            ).addMigrations(MIGRATION_3_4)
+            ).addMigrations(MIGRATION_2_3)
+                .addMigrations(MIGRATION_3_4)
                 .build()
         } catch (e: Exception) {
             Log.e("Database", "初始化失败: ${e.message}")
